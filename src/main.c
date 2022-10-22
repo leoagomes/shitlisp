@@ -3,7 +3,7 @@
 #include <linenoise.h>
 #include <string.h>
 
-#include "sshitlisp.h"
+#include "shitlisp.h"
 
 #define PROMPT "shitlisp> "
 #define HISTORY_FILE ".shitlisp_history"
