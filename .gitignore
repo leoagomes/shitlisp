@@ -1,2 +1,3 @@
 shitlisp
 *.o
+.shitlisp_history

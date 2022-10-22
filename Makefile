@@ -2,10 +2,10 @@ EXECUTABLE=shitlisp
 
 CC=gcc
 INCLUDES=-I. -Ilib
-CFLAGS=-Wall -Wextra -Werror -pedantic -O3 -g
+CFLAGS=
 LDFLAGS=
 
-SOURCES=$(wildcard *.c)
+SOURCES=$(wildcard src/*.c)
 LIBSOURCES=$(wildcard lib/*.c)
 
 all: $(EXECUTABLE)
@@ -13,8 +13,13 @@ all: $(EXECUTABLE)
 run: all
 	./$(EXECUTABLE)
 
-debug: CFLAGS += -DDEBUG
+debug: CFLAGS += -DDEBUG -g
 debug: $(EXECUTABLE)
+
+clean:
+	rm -f $(EXECUTABLE)
 
 $(EXECUTABLE): $(SOURCES) $(LIBSOURCES)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(INCLUDES) $^ -o $@
+
+.PHONY: all run debug clean
