@@ -67,14 +67,14 @@ struct object {
 
 struct string {
     OBJECT_HEADER;
-    char *_data;
-    size_t _length;
+    char *data;
+    size_t length;
 };
 
 struct symbol {
     OBJECT_HEADER;
-    char *_data;
-    size_t _length;
+    size_t length;
+    char name[0];
 };
 
 struct list {
@@ -114,5 +114,9 @@ struct environment {
 struct function {
     OBJECT_HEADER;
 };
+
+#define value_is_object(v) ((v)->type == VALUE_TYPE_OBJECT)
+#define value_is_nil(v) ((v)->type == VALUE_TYPE_NIL)
+#define value_is_list(val) (value_is_object(val) && ((val)->v.object.obj->_type == OBJECT_TYPE_LIST))
 
 #endif
