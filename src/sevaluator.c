@@ -1,4 +1,4 @@
-#ifndef __EVALUATOR_H__
-#define __EVALUATOR_H__
+#ifndef __SEVALUATOR_H__
+#define __SEVALUATOR_H__
 
 #endif

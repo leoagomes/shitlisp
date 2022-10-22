@@ -1,5 +1,5 @@
-#ifndef __SHITLISP_H__
-#define __SHITLISP_H__
+#ifndef __SSHITLISP_H__
+#define __SSHITLISP_H__
 
 #include "stypes.h"
 #include "sobject.h"

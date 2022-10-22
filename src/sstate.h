@@ -1,5 +1,5 @@
-#ifndef __STATE_H__
-#define __STATE_H__
+#ifndef __SSTATE_H__
+#define __SSTATE_H__
 
 #include "sobject.h"
 

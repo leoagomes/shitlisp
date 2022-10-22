@@ -1,5 +1,5 @@
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
+#ifndef __SOBJECT_H__
+#define __SOBJECT_H__
 
 #include "stypes.h"
 

@@ -1,5 +1,5 @@
-#ifndef __RUNTIME_H__
-#define __RUNTIME_H__
+#ifndef __SRUNTIME_H__
+#define __SRUNTIME_H__
 
 #include "stypes.h"
 #include "sobject.h"

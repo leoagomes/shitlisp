@@ -1,5 +1,5 @@
-#ifndef __GC_H__
-#define __GC_H__
+#ifndef __SGC_H__
+#define __SGC_H__
 
 #include "sobject.h"
 #include "sruntime.h"

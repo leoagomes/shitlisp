@@ -1,5 +1,5 @@
-#ifndef __PARSER_H__
-#define __PARSER_H__
+#ifndef __SPARSER_H__
+#define __SPARSER_H__
 
 #include "sobject.h"
 

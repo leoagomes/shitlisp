@@ -1,5 +1,5 @@
-#ifndef __MAP_H__
-#define __MAP_H__
+#ifndef __SMAP_H__
+#define __SMAP_H__
 
 #include "sobject.h"
 

@@ -1,5 +1,5 @@
-#ifndef __GLOBAL_H__
-#define __GLOBAL_H__
+#ifndef __SGLOBAL_H__
+#define __SGLOBAL_H__
 
 #include "stypes.h"
 #include "sobject.h"
