@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "aux.h"
-#include "gc.h"
-#include "global.h"
-#include "state.h"
+#include "saux.h"
+#include "sgc.h"
+#include "sglobal.h"
+#include "sstate.h"
 
 struct state* bootstrap_state() {
     struct global* global = global_new();

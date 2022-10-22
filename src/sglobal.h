@@ -1,9 +1,9 @@
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
-#include "types.h"
-#include "object.h"
-#include "gc.h"
+#include "stypes.h"
+#include "sobject.h"
+#include "sgc.h"
 
 struct global {
     struct gc gc;

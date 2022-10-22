@@ -1,10 +1,10 @@
 #ifndef __SHITLISP_H__
 #define __SHITLISP_H__
 
-#include "types.h"
-#include "object.h"
-#include "gc.h"
-#include "global.h"
-#include "aux.h"
+#include "stypes.h"
+#include "sobject.h"
+#include "sgc.h"
+#include "sglobal.h"
+#include "saux.h"
 
 #endif

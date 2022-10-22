@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "runtime.h"
+#include "sruntime.h"
 
 status_t run_protected_callback(
     struct state* state,

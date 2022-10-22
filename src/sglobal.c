@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "global.h"
+#include "sglobal.h"
 
 status_t global_init(struct global* global) {
     status_t result;

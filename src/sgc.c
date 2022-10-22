@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "gc.h"
+#include "sgc.h"
 
 status_t gc_init(struct gc* gc) {
     objl_close(&gc->object_list);

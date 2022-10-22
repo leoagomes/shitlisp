@@ -1,2 +1,2 @@
-#include "map.h"
+#include "smap.h"
 

@@ -1,8 +1,8 @@
 #ifndef __GC_H__
 #define __GC_H__
 
-#include "object.h"
-#include "runtime.h"
+#include "sobject.h"
+#include "sruntime.h"
 
 typedef enum {
     GC_STATUS_OK,

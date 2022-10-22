@@ -1,4 +1,4 @@
-#include "object.h"
+#include "sobject.h"
 
 void print_value(struct value* v, FILE* f) {
     switch (v->type) {
