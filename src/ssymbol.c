@@ -3,7 +3,6 @@
 
 #include "sglobal.h"
 #include "ssymbol.h"
-#include "sobject.h"
 #include "sgc.h"
 
 #define RED 'r'

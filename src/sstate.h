@@ -1,7 +1,7 @@
 #ifndef __SSTATE_H__
 #define __SSTATE_H__
 
-#include "sobject.h"
+#include "stypes.h"
 
 #define is_main_state(state) ((state)->global->main_state == (state))
 

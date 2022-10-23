@@ -2,7 +2,6 @@
 #define __SGLOBAL_H__
 
 #include "stypes.h"
-#include "sobject.h"
 #include "sgc.h"
 
 struct global {

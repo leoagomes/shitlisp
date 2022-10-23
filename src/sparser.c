@@ -5,7 +5,7 @@
 
 struct parser {
     struct state* state;
-    const char* source;
+    char* source;
     int position, line, column;
 };
 
@@ -21,7 +21,7 @@ struct token {
 status_t pread(struct parser* parser, struct value* dst);
 
 // "API" implementation
-status_t read_cstr(struct state* state, const char* source, struct value* dst) {
+status_t read_cstr(struct state* state, char* source, struct value* dst) {
     struct parser parser = {state, source, 0};
     return pread(&parser, dst);
 }

@@ -10,6 +10,9 @@
         "iosfwd": "c",
         "limits": "c",
         "sstream": "c",
-        "streambuf": "c"
+        "streambuf": "c",
+        "sgc.h": "c",
+        "sglobal.h": "c",
+        "sstate.h": "c"
     }
 }

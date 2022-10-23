@@ -1,7 +1,6 @@
 #ifndef __SGC_H__
 #define __SGC_H__
 
-#include "sobject.h"
 #include "sruntime.h"
 
 typedef enum {
