@@ -4,6 +4,8 @@
 #include <string.h>
 
 #include "shitlisp.h"
+#include "sstate.h"
+#include "sparser.h"
 
 #define PROMPT "shitlisp> "
 #define HISTORY_FILE ".shitlisp_history"
@@ -11,7 +13,7 @@
 int main(int argc, char *argv[]) {
     printf("welcome to shitlisp\n");
 
-    linenoiseSetMultiLine(1);
+    // linenoiseSetMultiLine(1);
     linenoiseHistoryLoad(HISTORY_FILE);
 
     struct state* state = bootstrap_state();
@@ -25,8 +27,12 @@ int main(int argc, char *argv[]) {
         }
 
         if (line[0] != '\0') {
-            // TODO: process line
-            printf("=> %s\n", line);
+            struct value v = {0};
+            read_cstr(state, line, &v);
+            printf("=> ");
+            print_value(&v, stdout);
+            printf("\n");
+
             linenoiseHistoryAdd(line);
             linenoiseHistorySave(HISTORY_FILE);
         }

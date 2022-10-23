@@ -8,6 +8,7 @@
 struct global {
     struct gc gc;
     struct state* main_state;
+    struct symbol* symbols;
 };
 
 struct global* global_new();

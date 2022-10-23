@@ -5,3 +5,4 @@ status_t state_init(struct state* state) {
     return STATUS_OK;
 }
 
+status_t state_push_object(struct state* state, struct object* object);

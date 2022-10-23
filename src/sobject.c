@@ -3,16 +3,16 @@
 void print_value(struct value* v, FILE* f) {
     switch (v->type) {
     case VALUE_TYPE_INT:
-        fprintf(f, "%d", v->v.i);
+        fprintf(f, "%d", v->value.integer);
         break;
     case VALUE_TYPE_DOUBLE:
-        fprintf(f, "%lf", v->v.d);
+        fprintf(f, "%lf", v->value.number);
         break;
     case VALUE_TYPE_NIL:
         fprintf(f, "null");
         break;
     case VALUE_TYPE_OBJECT:
-        print_object(v->v.object.obj, f);
+        print_object(v->value.object, f);
         break;
     default:
         fprintf(f, "#E<unknown value type>");
@@ -31,7 +31,7 @@ void print_object(struct object* obj, FILE* f) {
         fprintf(f, "\"%s\"", ((struct string*)obj)->data);
         break;
     case OBJECT_TYPE_SYMBOL:
-        fprintf(f, ":%s", ((struct symbol*)obj)->name);
+        fprintf(f, ":%s", ((struct symbol*)obj)->text);
         break;
     case OBJECT_TYPE_LIST:
         {
@@ -52,7 +52,7 @@ void print_object(struct object* obj, FILE* f) {
                 }
 
                 fprintf(f, " ");
-                node = node->cdr.v.object.list;
+                node = node->cdr.value.object_as.list;
             }
             fprintf(f, ")");
         }

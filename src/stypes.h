@@ -26,6 +26,7 @@ typedef enum {
 
 typedef enum {
     STATUS_OK,
+    STATUS_INVALID,
     STATUS_OUT_OF_MEMORY,
 } status_t;
 
@@ -40,21 +41,15 @@ struct list;
 struct value {
     value_type_t type;
     union {
-        int i;
-        double d;
-        void *p;
+        int integer;
+        double number;
+        void *pointer;
+        struct object *object;
         union {
-            struct object* obj;
-            struct string* str;
-            struct symbol* sym;
+            struct symbol* symbol;
             struct list* list;
-            struct vector* vec;
-            struct frame* frame;
-            struct state* state;
-            struct environment* env;
-            struct function* fn;
-        } object;
-    } v;
+        } object_as;
+    } value;
 };
 
 #define OBJECT_HEADER \
@@ -73,8 +68,10 @@ struct string {
 
 struct symbol {
     OBJECT_HEADER;
+    struct symbol *left, *right, *parent;
+    char color;
     size_t length;
-    char name[0];
+    char text[0];
 };
 
 struct list {
@@ -117,6 +114,6 @@ struct function {
 
 #define value_is_object(v) ((v)->type == VALUE_TYPE_OBJECT)
 #define value_is_nil(v) ((v)->type == VALUE_TYPE_NIL)
-#define value_is_list(val) (value_is_object(val) && ((val)->v.object.obj->_type == OBJECT_TYPE_LIST))
+#define value_is_list(val) (value_is_object(val) && ((val)->value.object->_type == OBJECT_TYPE_LIST))
 
 #endif

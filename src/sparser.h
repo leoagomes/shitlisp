@@ -3,6 +3,6 @@
 
 #include "sobject.h"
 
-status_t parse_cstr(struct state* state, const char* source);
+status_t read_cstr(struct state* state, const char* source, struct value* dst);
 
 #endif

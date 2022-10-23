@@ -5,6 +5,8 @@
 status_t global_init(struct global* global) {
     status_t result;
 
+    global->symbols = NULL;
+
     if ((result = gc_init(&global->gc)) != STATUS_OK) {
         return result;
     }

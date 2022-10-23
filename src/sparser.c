@@ -1,5 +1,131 @@
+#include "utf8.h"
+
 #include "sparser.h"
+#include "ssymbol.h"
 
-status_t parse_cstr(struct state* state, const char* source) {
+struct parser {
+    struct state* state;
+    const char* source;
+    int position, line, column;
+};
 
+struct token {
+    enum token_type {
+        TOK_SYMBOL,
+        TOK_PARENS,
+    } type;
+    const char* value;
+    int length, line, column, postion;
+};
+
+status_t pread(struct parser* parser, struct value* dst);
+
+// "API" implementation
+status_t read_cstr(struct state* state, const char* source, struct value* dst) {
+    struct parser parser = {state, source, 0};
+    return pread(&parser, dst);
+}
+
+// parser implementation
+
+#define pchar(p) ((p)->source[(p)->position])
+
+#define is_whitespace(c) (c == ' ' || c == '\t' || c == '\r' || c == '\n')
+#define is_newline(c) (c == '\n')
+#define is_end(c) (c == '\0')
+#define is_identifier_special_initial(c) (c == '!' || c == '$' || c == '%' || c == '&' || c == '*' || c == '/' || c == ':' || c == '<' || c == '=' || c == '>' || c == '?' || c == '^' || c == '_' || c == '~')
+#define is_identifier_initial(c) (isalpha(c) || is_identifier_special_initial(c))
+#define is_explicit_sign(c) (c == '+' || c == '-')
+#define is_identifier_subsequent(c) (is_identifier_initial(c) || isdigit(c) || is_explicit_sign(c) || (c) == '.' || (c) == '@')
+
+static void padvance(struct parser* parser) {
+    char c = pchar(parser);
+    if (is_end(c)) return;
+
+    parser->position++;
+    if (is_newline(c)) {
+        parser->line++;
+        parser->column = 0;
+    } else {
+        parser->column++;
+    }
+}
+
+void skip_whitespace(struct parser* parser) {
+    char *c = &pchar(parser);
+    while (
+        !is_end(*c) &&
+        is_whitespace(*c)
+    ) {
+        if (is_newline(*c)) {
+            parser->line++;
+            parser->column = 0;
+        }
+
+        c++; // huh
+        padvance(parser);
+    }
+}
+
+status_t read_list(struct parser* parser, struct value* dst) {
+    if (pchar(parser) != '(') return STATUS_INVALID;
+
+    skip_whitespace(parser);
+
+    if (pchar(parser) == ')') {
+        padvance(parser);
+        padvance(parser);
+        dst->type = VALUE_TYPE_NIL;
+        dst->value.object = NULL;
+        return STATUS_OK;
+    }
+
+    do {
+        pread(parser, dst);
+        skip_whitespace(parser);
+    } while (!is_end(pchar(parser)) && pchar(parser) != ')');
+
+    return STATUS_OK;
+}
+
+status_t read_symbol(struct parser* parser, struct value* dst) {
+    char* symbol_str = &pchar(parser);
+    int symbol_len = 0;
+
+    if (!is_identifier_initial(*symbol_str)) {
+        return STATUS_INVALID;
+    }
+    padvance(parser);
+
+    while (
+        !is_end(pchar(parser)) &&
+        is_identifier_subsequent(pchar(parser))
+    ) {
+        padvance(parser);
+        symbol_len++;
+    }
+
+    symbolv_from_c_string(parser->state, symbol_str, dst);
+    return STATUS_OK;
+}
+
+status_t pread(struct parser* parser, struct value* dst) {
+    skip_whitespace(parser);
+
+    char c = pchar(parser);
+
+    if (is_end(c)) {
+        *dst = (struct value) { .type = VALUE_TYPE_NIL };
+        return STATUS_OK;
+    }
+
+    if (is_identifier_initial(c)) {
+        return read_symbol(parser, dst);
+    }
+
+    if (c == '(') {
+        return read_list(parser, dst);
+    }
+
+    return STATUS_OK;
 }

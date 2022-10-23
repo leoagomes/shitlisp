@@ -7,4 +7,6 @@
 
 status_t state_init(struct state* state);
 
+status_t state_push_object(struct state* state, struct object* object);
+
 #endif
