@@ -2,6 +2,7 @@
 
 #include "sparser.h"
 #include "ssymbol.h"
+#include "scons.h"
 
 struct parser {
     struct state* state;
@@ -29,6 +30,7 @@ status_t read_cstr(struct state* state, char* source, struct value* dst) {
 // parser implementation
 
 #define pchar(p) ((p)->source[(p)->position])
+#define poffchar(p,o) ((p)->source[(p)->position + (o)])
 
 #define is_whitespace(c) (c == ' ' || c == '\t' || c == '\r' || c == '\n')
 #define is_newline(c) (c == '\n')
@@ -69,20 +71,40 @@ void skip_whitespace(struct parser* parser) {
 
 status_t read_list(struct parser* parser, struct value* dst) {
     if (pchar(parser) != '(') return STATUS_INVALID;
+    padvance(parser);
 
     skip_whitespace(parser);
 
     if (pchar(parser) == ')') {
-        padvance(parser);
         padvance(parser);
         dst->type = VALUE_TYPE_NIL;
         dst->value.object = NULL;
         return STATUS_OK;
     }
 
+    struct value* next_cell = dst;
     do {
-        pread(parser, dst);
+        next_cell->type = VALUE_TYPE_OBJECT;
+        next_cell->value.object_as.cons = cons_new(parser->state, NULL, NULL);
+        status_t result = pread(parser, &next_cell->value.object_as.cons->car);
+        if (result != STATUS_OK) return result;
+
         skip_whitespace(parser);
+
+        if (pchar(parser) == '.' && is_whitespace(poffchar(parser, 1))) {
+            padvance(parser);
+            skip_whitespace(parser);
+
+            result = pread(parser, &next_cell->value.object_as.cons->cdr);
+            if (result != STATUS_OK) return result;
+
+            skip_whitespace(parser);
+
+            if (pchar(parser) != ')') return STATUS_INVALID;
+            padvance(parser);
+            return STATUS_OK;
+        }
+        next_cell = &next_cell->value.object_as.cons->cdr;
     } while (!is_end(pchar(parser)) && pchar(parser) != ')');
 
     return STATUS_OK;
@@ -95,6 +117,7 @@ status_t read_symbol(struct parser* parser, struct value* dst) {
     if (!is_identifier_initial(*symbol_str)) {
         return STATUS_INVALID;
     }
+    symbol_len++;
     padvance(parser);
 
     while (
@@ -105,7 +128,7 @@ status_t read_symbol(struct parser* parser, struct value* dst) {
         symbol_len++;
     }
 
-    symbolv_from_c_string(parser->state, symbol_str, dst);
+    symbolv_from_c_string(parser->state, symbol_str, symbol_len, dst);
     return STATUS_OK;
 }
 
@@ -127,5 +150,5 @@ status_t pread(struct parser* parser, struct value* dst) {
         return read_list(parser, dst);
     }
 
-    return STATUS_OK;
+    return STATUS_INVALID;
 }

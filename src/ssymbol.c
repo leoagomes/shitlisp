@@ -33,14 +33,18 @@ struct symbol* symbol_new(struct state* state, const char* text, size_t length) 
 void symbolv_from_c_string(
     struct state* state,
     const char* text,
+    size_t length,
     struct value* dst
 ) {
-    dst->value.object_as.symbol = symbol_from_c_string(state, text);
+    dst->value.object_as.symbol = symbol_from_c_string(state, text, length);
     dst->type = VALUE_TYPE_OBJECT;
 }
 
-struct symbol* symbol_from_c_string(struct state* state, const char* text) {
-    size_t length = strlen(text);
+struct symbol* symbol_from_c_string(
+    struct state* state,
+    const char* text,
+    size_t length
+) {
     return stree_insert(state, stree_root(state), text, length);
 }
 

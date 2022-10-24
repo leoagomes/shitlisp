@@ -65,9 +65,9 @@ void print_object(struct object* obj, FILE* f) {
     case OBJECT_TYPE_SYMBOL:
         fprintf(f, ":%s", ((struct symbol*)obj)->text);
         break;
-    case OBJECT_TYPE_LIST:
+    case OBJECT_TYPE_CONS:
         {
-            struct list* node = (struct list*)obj;
+            struct cons* node = (struct cons*)obj;
 
             fprintf(f, "(");
             while (node != NULL) {
@@ -84,7 +84,7 @@ void print_object(struct object* obj, FILE* f) {
                 }
 
                 fprintf(f, " ");
-                node = node->cdr.value.object_as.list;
+                node = node->cdr.value.object_as.cons;
             }
             fprintf(f, ")");
         }

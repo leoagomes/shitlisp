@@ -7,11 +7,9 @@
 
 typedef enum {
     OBJECT_TYPE_NIL,
-    OBJECT_TYPE_STRING,
     OBJECT_TYPE_SYMBOL,
-    OBJECT_TYPE_VALUE,
-    OBJECT_TYPE_LIST,
-    OBJECT_TYPE_POINTER,
+    OBJECT_TYPE_CONS,
+    OBJECT_TYPE_STRING,
     OBJECT_TYPE_COUNT
 } object_type_t;
 
@@ -36,7 +34,7 @@ typedef int (*generic_callback)(struct state*, void*);
 struct object;
 struct string;
 struct symbol;
-struct list;
+struct cons;
 
 struct value {
     value_type_t type;
@@ -47,7 +45,7 @@ struct value {
         struct object *object;
         union {
             struct symbol* symbol;
-            struct list* list;
+            struct cons* cons;
         } object_as;
     } value;
 };
@@ -74,7 +72,7 @@ struct symbol {
     char text[0];
 };
 
-struct list {
+struct cons {
     OBJECT_HEADER;
     struct value car, cdr;
 };
@@ -112,8 +110,17 @@ struct function {
     OBJECT_HEADER;
 };
 
+static struct value _nil = { .type = VALUE_TYPE_NIL, .value = { .object = NULL } };
+
 #define value_is_object(v) ((v)->type == VALUE_TYPE_OBJECT)
 #define value_is_nil(v) ((v)->type == VALUE_TYPE_NIL)
-#define value_is_list(val) (value_is_object(val) && ((val)->value.object->_type == OBJECT_TYPE_LIST))
+#define value_is_cons(val) (value_is_object(val) && ((val)->value.object->_type == OBJECT_TYPE_CONS))
+#define value_is_list(val) (value_is_nil(val) || value_is_cons(val))
+
+#define value_copy(dst, src) \
+    do { \
+        (dst)->type = (src)->type; \
+        (dst)->value = (src)->value; \
+    } while (0)
 
 #endif
