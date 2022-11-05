@@ -3,9 +3,9 @@
 
 #include "stypes.h"
 
-struct map* new_map(struct state* state, size_t count);
+// struct map* new_map(struct state* state, size_t count);
 
-int mark_map(struct state* state, struct map* map);
-void free_map(struct state* state, struct map* map);
+// int mark_map(struct state* state, struct map* map);
+// void free_map(struct state* state, struct map* map);
 
 #endif

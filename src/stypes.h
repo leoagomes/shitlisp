@@ -121,7 +121,7 @@ struct function {
     OBJECT_HEADER;
 };
 
-#define NIL_VALUE ((struct value){VALUE_TYPE_NIL, {NULL}})
+#define NIL_VALUE ((struct value){VALUE_TYPE_NIL, {0}})
 static struct value _nil = NIL_VALUE;
 
 #define value_is_object(v) ((v)->type == VALUE_TYPE_OBJECT)

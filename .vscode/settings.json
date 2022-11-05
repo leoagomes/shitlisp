@@ -16,6 +16,12 @@
         "sstate.h": "c",
         "ctype.h": "c",
         "svalue.h": "c",
-        "stypes.h": "c"
+        "stypes.h": "c",
+        "optional": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
     }
 }

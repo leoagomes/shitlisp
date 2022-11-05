@@ -41,6 +41,11 @@ void* palloc(struct state* state, size_t size) {
     return obj;
 }
 
+void* prealloc(struct state* state, void* ptr, size_t size) {
+    // TODO: care about GC/memory
+    return realloc(ptr, size);
+}
+
 void free_object(struct state* state, struct object* obj) {
     // free(obj);
 }

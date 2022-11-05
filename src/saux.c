@@ -4,6 +4,7 @@
 #include "sgc.h"
 #include "sglobal.h"
 #include "sstate.h"
+#include "ssymbol.h"
 
 struct state* bootstrap_state() {
     struct global* global = global_new();
@@ -25,6 +26,8 @@ struct state* bootstrap_state() {
     state->global = global;
     global->main_state = state;
     objl_append((struct object*)state, &global->gc.root_list);
+
+    init_symbol_table(state);
 
     return state;
 }

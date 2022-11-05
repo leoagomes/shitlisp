@@ -21,6 +21,7 @@ struct object* alloc_object(struct state*, object_type_t type, size_t size);
 void free_object(struct state*, struct object*);
 
 void* palloc(struct state*, size_t size);
+void* prealloc(struct state*, void* ptr, size_t size);
 
 int mark_value(struct state*, struct value*);
 int mark_object(struct state*, struct object*);
