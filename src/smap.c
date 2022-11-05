@@ -118,7 +118,7 @@ struct value* map_get_symbol(
 #define get_node(map, index) (&((map)->nodes[(index)]))
 #define node_count(map) (twoto((map)->logsize))
 #define hash_mod(map, node) (get_node(map, ((node) % ((node_count(map) - 1) | 1))))
-#define hash_pointer(map, pointer) (hash_mod(map, (unsigned int)((size_t)(pointer) & UINT_MAX)))
+#define hash_pointer(map, pointer) (hash_mod(map, (unsigned int)((size_t)(pointer) & unsigned int_MAX)))
 
 static struct map_node* hash_int(struct map* map, int key) {
     unsigned int ui = (unsigned int)key;

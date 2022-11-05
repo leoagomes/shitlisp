@@ -13,7 +13,7 @@ struct global {
     struct gc gc;
     struct state* main_state;
     struct symbol* symbols;
-    uint seed;
+    unsigned int seed;
     struct symbol_table symbol_table;
 };
 

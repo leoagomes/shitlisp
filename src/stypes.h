@@ -72,7 +72,7 @@ struct symbol {
     OBJECT_HEADER;
     struct symbol* table_next;
     size_t length;
-    uint hash;
+    unsigned int hash;
     char text[0];
 };
 

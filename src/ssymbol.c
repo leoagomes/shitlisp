@@ -11,10 +11,10 @@
 
 #define stree_root(state) ((state)->global->symbols)
 
-uint hash_as_symbol(const char* text, size_t length, uint seed) {
-    uint hash = seed ^ (uint)length;
+unsigned int hash_as_symbol(const char* text, size_t length, unsigned int seed) {
+    unsigned int hash = seed ^ (unsigned int)length;
     for (; length > 0; length--) 
-        hash ^= (hash << 5) + (hash >> 2) + (uint)text[length - 1];
+        hash ^= (hash << 5) + (hash >> 2) + (unsigned int)text[length - 1];
     return hash;
 }
 
@@ -62,7 +62,7 @@ struct symbol* symbol_from_c_string(
     size_t length
 ) {
     // look up the symbol in the symbol table
-    uint hash = hash_as_symbol(text, length, state->global->seed);
+    unsigned int hash = hash_as_symbol(text, length, state->global->seed);
     struct symbol_table* table = &state->global->symbol_table;
     struct symbol** symbol_list = &table->symbols[hash % table->capacity];
 
