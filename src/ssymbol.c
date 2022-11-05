@@ -6,11 +6,6 @@
 #include "ssymbol.h"
 #include "sgc.h"
 
-#define RED 'r'
-#define BLACK 'b'
-
-#define stree_root(state) ((state)->global->symbols)
-
 unsigned int hash_as_symbol(const char* text, size_t length, unsigned int seed) {
     unsigned int hash = seed ^ (unsigned int)length;
     for (; length > 0; length--) 
