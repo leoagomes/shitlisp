@@ -10,6 +10,8 @@ typedef enum {
     OBJECT_TYPE_SYMBOL,
     OBJECT_TYPE_CONS,
     OBJECT_TYPE_STRING,
+    OBJECT_TYPE_STATE,
+    OBJECT_TYPE_MAP,
     OBJECT_TYPE_COUNT
 } object_type_t;
 
@@ -26,6 +28,8 @@ typedef enum {
     STATUS_OK,
     STATUS_INVALID,
     STATUS_OUT_OF_MEMORY,
+    STATUS_INVALID_ARGUMENT,
+    STATUS_SYMBOL_TABLE_LIMIT,
 } status_t;
 
 struct state;
@@ -66,9 +70,9 @@ struct string {
 
 struct symbol {
     OBJECT_HEADER;
-    struct symbol *left, *right, *parent;
-    char color;
+    struct symbol* table_next;
     size_t length;
+    uint hash;
     char text[0];
 };
 
@@ -83,10 +87,17 @@ struct vector {
     size_t length;
 };
 
+struct map_node {
+    struct value value, key;
+    int next;
+};
+
 struct map {
     OBJECT_HEADER;
-    struct value *data;
-    size_t length;
+    unsigned char logsize;
+    struct map_node *nodes, *free;
+    struct map* meta;
+    int count;
 };
 
 struct frame {
@@ -110,17 +121,24 @@ struct function {
     OBJECT_HEADER;
 };
 
-static struct value _nil = { .type = VALUE_TYPE_NIL, .value = { .object = NULL } };
+#define NIL_VALUE ((struct value){VALUE_TYPE_NIL, {NULL}})
+static struct value _nil = NIL_VALUE;
 
 #define value_is_object(v) ((v)->type == VALUE_TYPE_OBJECT)
 #define value_is_nil(v) ((v)->type == VALUE_TYPE_NIL)
-#define value_is_cons(val) (value_is_object(val) && ((val)->value.object->_type == OBJECT_TYPE_CONS))
+#define value_is_cons(val) (value_is_object(val) && object_is_cons((val)->value.object))
 #define value_is_list(val) (value_is_nil(val) || value_is_cons(val))
+#define value_is_symbol(val) (value_is_object(val) && object_is_symbol((val)->value.object))
+
+#define object_is_type(obj, type) ((obj)->_type == (type)) // TODO: apply mask
+#define object_is_cons(obj) object_is_type(obj, OBJECT_TYPE_CONS)
+#define object_is_symbol(obj) object_is_type(obj, OBJECT_TYPE_SYMBOL)
 
 #define value_copy(dst, src) \
     do { \
         (dst)->type = (src)->type; \
         (dst)->value = (src)->value; \
     } while (0)
+
 
 #endif

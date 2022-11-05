@@ -13,6 +13,9 @@
         "streambuf": "c",
         "sgc.h": "c",
         "sglobal.h": "c",
-        "sstate.h": "c"
+        "sstate.h": "c",
+        "ctype.h": "c",
+        "svalue.h": "c",
+        "stypes.h": "c"
     }
 }

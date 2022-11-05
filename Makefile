@@ -3,7 +3,7 @@ EXECUTABLE=shitlisp
 CC=gcc
 INCLUDES=-I. -Ilib
 CFLAGS=
-LDFLAGS=
+LDFLAGS=-lm
 
 SOURCES=$(wildcard src/*.c)
 LIBSOURCES=$(wildcard lib/*.c)

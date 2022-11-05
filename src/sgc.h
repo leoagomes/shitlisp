@@ -18,6 +18,12 @@ gc_status_t collect_garbage(struct state*, int full);
 
 /* --- object lifecycle --- */
 struct object* alloc_object(struct state*, object_type_t type, size_t size);
+void free_object(struct state*, struct object*);
+
+void* palloc(struct state*, size_t size);
+
+int mark_value(struct state*, struct value*);
+int mark_object(struct state*, struct object*);
 
 /* --- object list --- */
 void objl_close(struct object* obj);

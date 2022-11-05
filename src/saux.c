@@ -14,6 +14,7 @@ struct state* bootstrap_state() {
         global_free(global);
         return NULL;
     }
+    objl_close((struct object*)state);
     if (state_init(state) != STATUS_OK) {
         free(state);
         global_free(global);

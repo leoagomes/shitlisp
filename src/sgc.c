@@ -21,7 +21,15 @@ gc_status_t collect_garbage(struct state* state, int full) {
 /* --- object lifecycle --- */
 
 struct object* alloc_object(struct state* state, object_type_t type, size_t size) {
-    struct object* obj = malloc(size);
+    struct object* obj = palloc(state, size);
+    obj->_type = type;
+    objl_close(obj);
+
+    return obj;
+}
+
+void* palloc(struct state* state, size_t size) {
+    void* obj = malloc(size);
     if (obj == NULL) {
         collect_garbage(state, 1);
         obj = malloc(size);
@@ -30,11 +38,21 @@ struct object* alloc_object(struct state* state, object_type_t type, size_t size
             return NULL; // unreachable
         }
     }
-
-    obj->_type = type;
-    objl_close(obj);
-
     return obj;
+}
+
+void free_object(struct state* state, struct object* obj) {
+    // free(obj);
+}
+
+int mark_value(struct state* state, struct value* value) {
+    return 0;
+}
+
+int mark_object(struct state* state, struct object* object) {
+    if (object == NULL) return 0;
+
+    return 0;
 }
 
 /* --- object list --- */
