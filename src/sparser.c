@@ -34,7 +34,7 @@ status_t read_cstr(struct state* state, char* source, struct value* dst) {
 
 #define is_whitespace(c) (c == ' ' || c == '\t' || c == '\r' || c == '\n')
 #define is_newline(c) (c == '\n')
-#define is_end(c) (c == '\0')
+#define is_end(c) ((c) == '\0')
 #define is_identifier_special_initial(c) (c == '!' || c == '$' || c == '%' || c == '&' || c == '*' || c == '/' || c == ':' || c == '<' || c == '=' || c == '>' || c == '?' || c == '^' || c == '_' || c == '~')
 #define is_identifier_initial(c) (isalpha(c) || is_identifier_special_initial(c))
 #define is_explicit_sign(c) (c == '+' || c == '-')
@@ -53,7 +53,7 @@ static void padvance(struct parser* parser) {
     }
 }
 
-void skip_whitespace(struct parser* parser) {
+static void skip_whitespace(struct parser* parser) {
     char *c = &pchar(parser);
     while (
         !is_end(*c) &&
@@ -101,11 +101,10 @@ status_t read_list(struct parser* parser, struct value* dst) {
             skip_whitespace(parser);
 
             if (pchar(parser) != ')') return STATUS_INVALID;
-            padvance(parser);
-            return STATUS_OK;
         }
         next_cell = &next_cell->value.object_as.cons->cdr;
     } while (!is_end(pchar(parser)) && pchar(parser) != ')');
+    padvance(parser);
 
     return STATUS_OK;
 }
