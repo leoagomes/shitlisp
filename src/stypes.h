@@ -21,6 +21,8 @@ typedef enum {
     VALUE_TYPE_DOUBLE,
     VALUE_TYPE_POINTER,
     VALUE_TYPE_OBJECT,
+    VALUE_TYPE_TRUE,
+    VALUE_TYPE_FALSE,
     VALUE_TYPE_COUNT
 } value_type_t;
 
@@ -122,7 +124,11 @@ struct function {
 };
 
 #define NIL_VALUE ((struct value){VALUE_TYPE_NIL, {0}})
+#define TRUE_VALUE ((struct value){VALUE_TYPE_TRUE, {0}})
+#define FALSE_VALUE ((struct value){VALUE_TYPE_FALSE, {0}})
 static struct value _nil = NIL_VALUE;
+static struct value _t = TRUE_VALUE;
+static struct value _f = FALSE_VALUE;
 
 #define value_is_object(v) ((v)->type == VALUE_TYPE_OBJECT)
 #define value_is_nil(v) ((v)->type == VALUE_TYPE_NIL)

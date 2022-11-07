@@ -35,10 +35,26 @@ status_t read_cstr(struct state* state, char* source, struct value* dst) {
 #define is_whitespace(c) (c == ' ' || c == '\t' || c == '\r' || c == '\n')
 #define is_newline(c) (c == '\n')
 #define is_end(c) ((c) == '\0')
-#define is_identifier_special_initial(c) (c == '!' || c == '$' || c == '%' || c == '&' || c == '*' || c == '/' || c == ':' || c == '<' || c == '=' || c == '>' || c == '?' || c == '^' || c == '_' || c == '~')
-#define is_identifier_initial(c) (isalpha(c) || is_identifier_special_initial(c))
+#define is_identifier_special_initial(c) ( \
+    (c) == '!' || (c) == '$' || (c) == '%' || (c) == '&' || (c) == '*' || \
+    (c) == '/' || (c) == ':' || (c) == '<' || (c) == '=' || (c) == '>' || \
+    (c) == '?' || (c) == '^' || (c) == '_' || (c) == '~' \
+)
+
+#define is_identifier_initial(c) \
+    (isalpha(c) || is_identifier_special_initial(c))
 #define is_explicit_sign(c) (c == '+' || c == '-')
-#define is_identifier_subsequent(c) (is_identifier_initial(c) || isdigit(c) || is_explicit_sign(c) || (c) == '.' || (c) == '@')
+#define is_identifier_subsequent(c) ( \
+    is_identifier_initial(c) || isdigit(c) || is_explicit_sign(c) || \
+    (c) == '.' || (c) == '@' \
+)
+#define is_hash(c) ((c) == '#')
+#define is_delimiter(c) ( \
+    is_whitespace(c) || is_end(c) || is_newline(c) || \
+    (c) == '(' || (c) == ')' || \
+    (c) == '"' || \
+    (c) == ';' \
+)
 
 static void padvance(struct parser* parser) {
     char c = pchar(parser);
@@ -131,6 +147,21 @@ status_t read_symbol(struct parser* parser, struct value* dst) {
     return STATUS_OK;
 }
 
+status_t read_hash_expression(struct parser* parser, struct value* dst) {
+    if (pchar(parser) != '#') return STATUS_INVALID;
+    padvance(parser);
+
+    if (pchar(parser) == 't' && is_delimiter(poffchar(parser, 1))) {
+        padvance(parser);
+        dst->type = VALUE_TYPE_TRUE;
+        return STATUS_OK;
+    } else if (pchar(parser) == 'f' && is_delimiter(poffchar(parser, 1))) {
+        padvance(parser);
+        dst->type = VALUE_TYPE_FALSE;
+        return STATUS_OK;
+    }
+}
+
 status_t pread(struct parser* parser, struct value* dst) {
     skip_whitespace(parser);
 
@@ -147,6 +178,10 @@ status_t pread(struct parser* parser, struct value* dst) {
 
     if (c == '(') {
         return read_list(parser, dst);
+    }
+
+    if (is_hash(c)) {
+        return read_hash_expression(parser, dst);
     }
 
     return STATUS_INVALID;
