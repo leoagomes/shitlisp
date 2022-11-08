@@ -14,14 +14,16 @@ struct gc {
 status_t gc_init(struct gc* gc);
 status_t gc_terminate(struct gc* gc);
 
-gc_status_t collect_garbage(struct state*, int full);
+gc_status_t gc_collect_garbage(struct state*, int full);
 
 /* --- object lifecycle --- */
-struct object* alloc_object(struct state*, object_type_t type, size_t size);
-void free_object(struct state*, struct object*);
+struct object* gc_create_object(struct state*, object_type_t type, size_t size);
+void gc_free_object(struct state*, struct object*);
 
-void* palloc(struct state*, size_t size);
-void* prealloc(struct state*, void* ptr, size_t size);
+void* protected_alloc(struct state*, size_t size);
+void* protected_realloc(struct state*, void* ptr, size_t size);
+// actually just free, but should be wrapped in case of GC
+void protected_free(struct state*, void* ptr);
 
 int mark_value(struct state*, struct value*);
 int mark_object(struct state*, struct object*);

@@ -12,7 +12,7 @@ status_t gc_terminate(struct gc* gc) {
     return STATUS_OK;
 }
 
-gc_status_t collect_garbage(struct state* state, int full) {
+gc_status_t gc_collect_garbage(struct state* state, int full) {
     // TODO:
     return GC_STATUS_OK;
 }
@@ -20,18 +20,18 @@ gc_status_t collect_garbage(struct state* state, int full) {
 
 /* --- object lifecycle --- */
 
-struct object* alloc_object(struct state* state, object_type_t type, size_t size) {
-    struct object* obj = palloc(state, size);
+struct object* gc_create_object(struct state* state, object_type_t type, size_t size) {
+    struct object* obj = protected_alloc(state, size);
     obj->_type = type;
     objl_close(obj);
 
     return obj;
 }
 
-void* palloc(struct state* state, size_t size) {
+void* protected_alloc(struct state* state, size_t size) {
     void* obj = malloc(size);
     if (obj == NULL) {
-        collect_garbage(state, 1);
+        gc_collect_garbage(state, 1);
         obj = malloc(size);
         if (obj == NULL) {
             fail(state, STATUS_OUT_OF_MEMORY);
@@ -41,12 +41,16 @@ void* palloc(struct state* state, size_t size) {
     return obj;
 }
 
-void* prealloc(struct state* state, void* ptr, size_t size) {
+void* protected_realloc(struct state* state, void* ptr, size_t size) {
     // TODO: care about GC/memory
     return realloc(ptr, size);
 }
 
-void free_object(struct state* state, struct object* obj) {
+void protected_free(struct state* _state, void* ptr) {
+    free(ptr);
+}
+
+void gc_free_object(struct state* state, struct object* obj) {
     // free(obj);
 }
 
