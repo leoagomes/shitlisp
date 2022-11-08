@@ -5,5 +5,6 @@
 #include "sgc.h"
 #include "sglobal.h"
 #include "saux.h"
+#include "sprinter.h"
 
 #endif

@@ -8,7 +8,4 @@
 struct state* bootstrap_state();
 void destroy_state(struct state* state);
 
-void print_value(struct value* v, FILE* f);
-void print_object(struct object* obj, FILE* f);
-
 #endif

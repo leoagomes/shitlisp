@@ -5,7 +5,7 @@
 
 #include "shitlisp.h"
 #include "sstate.h"
-#include "sparser.h"
+#include "sreader.h"
 
 #define PROMPT "shitlisp> "
 #define HISTORY_FILE ".shitlisp_history"
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
             struct value v = {0};
             read_cstr(state, line, &v);
             printf("=> ");
-            print_value(&v, stdout);
+            print_value(state, &v, stdout);
             printf("\n");
 
             linenoiseHistoryAdd(line);

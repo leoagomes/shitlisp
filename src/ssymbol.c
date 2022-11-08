@@ -71,7 +71,7 @@ struct symbol* create_new_symbol(
     size_t length,
     unsigned int hash
 ) {
-    struct symbol* symbol = (struct symbol*)alloc_object(
+    struct symbol* symbol = (struct symbol*)gc_create_object(
         state,
         OBJECT_TYPE_SYMBOL,
         sizeof(struct symbol) + length + 1
@@ -116,7 +116,7 @@ void init_symbol_table(struct state* state) {
     struct symbol_table* table = &state->global->symbol_table;
     table->count = 0;
     table->capacity = INITIAL_SYMBOL_TABLE_CAPACITY;
-    table->symbols = palloc(state, sizeof(struct symbol*) * table->capacity);
+    table->symbols = protected_alloc(state, sizeof(struct symbol*) * table->capacity);
     rehash_table(table->symbols, table->capacity, 0);
     // TODO: pre-create memory exhausted message
 }
@@ -124,7 +124,7 @@ void init_symbol_table(struct state* state) {
 void resize_symbol_table(struct state* state, int new_capacity) {
     struct symbol_table* table = &state->global->symbol_table;
     int old_capacity = table->capacity;
-    struct symbol** new_symbols = prealloc(
+    struct symbol** new_symbols = protected_realloc(
         state,
         table->symbols,
         sizeof(struct symbol*) * new_capacity
