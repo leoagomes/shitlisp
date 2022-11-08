@@ -1,5 +1,5 @@
-#ifndef __SPARSER_H__
-#define __SPARSER_H__
+#ifndef __SREADER_H__
+#define __SREADER_H__
 
 #include "stypes.h"
 

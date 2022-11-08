@@ -1,6 +1,6 @@
 #include "utf8.h"
 
-#include "sparser.h"
+#include "sreader.h"
 #include "ssymbol.h"
 #include "scons.h"
 
