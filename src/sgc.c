@@ -20,7 +20,7 @@ gc_status_t gc_collect_garbage(struct state* state, int full) {
 
 /* --- object lifecycle --- */
 
-struct object* gc_create_object(struct state* state, object_type_t type, size_t size) {
+void* gc_create_object(struct state* state, object_type_t type, size_t size) {
     struct object* obj = protected_alloc(state, size);
     obj->_type = type;
     objl_close(obj);

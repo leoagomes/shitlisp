@@ -13,7 +13,7 @@ struct cons* cons_new(
     struct value* car,
     struct value* cdr
 ) {
-    struct cons* cons = (struct cons*)gc_create_object(state, OBJECT_TYPE_CONS, sizeof(struct cons));
+    struct cons* cons = gc_create_object(state, OBJECT_TYPE_CONS, sizeof(struct cons));
     value_copy(&cons->car, car ? car : &_nil);
     value_copy(&cons->cdr, cdr ? cdr : &_nil);
     return cons;

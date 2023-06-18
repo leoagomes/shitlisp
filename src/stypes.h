@@ -4,6 +4,10 @@
 #include <ctype.h>
 #include <stddef.h>
 #include <setjmp.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+#include "utf8.h"
 
 typedef enum {
     OBJECT_TYPE_NIL,
@@ -12,6 +16,7 @@ typedef enum {
     OBJECT_TYPE_STRING,
     OBJECT_TYPE_STATE,
     OBJECT_TYPE_MAP,
+    OBJECT_TYPE_PORT,
     OBJECT_TYPE_COUNT
 } object_type_t;
 
@@ -66,8 +71,8 @@ struct object {
 
 struct string {
     OBJECT_HEADER;
-    char *data;
     size_t length;
+    char text[0];
 };
 
 struct symbol {
@@ -81,6 +86,22 @@ struct symbol {
 struct cons {
     OBJECT_HEADER;
     struct value car, cdr;
+};
+
+struct port {
+    OBJECT_HEADER;
+    unsigned char flags;
+
+    union {
+        struct {
+            char *data;
+            size_t length;
+        } string;
+
+        struct {
+            FILE *file;
+        } file;
+    };
 };
 
 struct vector {

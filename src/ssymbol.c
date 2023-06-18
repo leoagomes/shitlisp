@@ -71,7 +71,7 @@ struct symbol* create_new_symbol(
     size_t length,
     unsigned int hash
 ) {
-    struct symbol* symbol = (struct symbol*)gc_create_object(
+    struct symbol* symbol = gc_create_object(
         state,
         OBJECT_TYPE_SYMBOL,
         sizeof(struct symbol) + length + 1
